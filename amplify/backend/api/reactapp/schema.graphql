@@ -2,31 +2,94 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
- type User
-  @model{
-  id:ID!
-  first_name:String
-  last_name:String
-  email:String
+#  type User
+#   @model{
+#   id:ID!
+#   first_name:String
+#   last_name:String
+#   email:String
+# }
+
+#  type Event
+#  @model (timestamps: {createdAt: "createdAt", updatedAt: "updatedAt" }) {
+#  id:ID!
+#  title:String
+#  description:String
+#  image:String
+# #  giftevent:[Gift] @hasMany 
+#  gifts: [Gift] @hasMany(indexName: "byEvent", fields: ["id"])
+
+# }
+
+#  type Gift 
+#  @model (timestamps: {createdAt: "createdAt", updatedAt: "updatedAt" }) {
+#  id:ID!
+#  title:String
+#   description:String
+#   image:String
+#   event_id: ID! @index(name: "byEvent")
+#   event: Event @hasOne(fields:["event_id"])
+# } 
+
+
+#hasone relation belongto 
+
+# type Project @model {
+#   id: ID!
+#   name: String
+#   team: Team @hasOne
+# }
+
+# type Team @model {
+#   id: ID!
+#   name: String!
+#   project: Project @belongsTo
+# }
+
+#hasmany relation belongto 
+
+
+# type Post @model {
+#  id: ID!
+#  post: String!
+#  user: User @belongsTo
+# }
+
+# type Comment @model {
+#  id: ID!
+#  Comment: String!
+#  post: Post @belongsTo
+# }
+
+#many to many relationship
+
+
+type User @model {
+  id: ID!
+  name: String
+  post: [Post] @hasMany
+  comment: [Comment] @hasMany
+ }
+
+type Post @model {
+  id: ID!
+  title: String!
+  content: String
+  tags: [Tag] @manyToMany(relationName: "PostTags")
+  comments: [Comment] @hasMany
+  user: User @belongsTo
+}
+type Comment @model {
+  id: ID!
+  content: String!
+  post: Post @belongsTo
 }
 
- type Event
- @model (timestamps: {createdAt: "createdAt", updatedAt: "updatedAt" }) {
- id:ID!
- title:String
- description:String
- image:String
-#  giftevent:[Gift] @hasMany 
- gifts: [Gift] @hasMany(indexName: "byEvent", fields: ["id"])
 
+type Tag @model {
+  id: ID!
+  label: String!
+  posts: [Post] @manyToMany(relationName: "PostTags")
 }
 
- type Gift 
- @model (timestamps: {createdAt: "createdAt", updatedAt: "updatedAt" }) {
- id:ID!
- title:String
-  description:String
-  image:String
-  event_id: ID! @index(name: "byEvent")
-  event: Event @hasOne(fields:["event_id"])
-} 
+

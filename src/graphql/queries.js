@@ -5,9 +5,29 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       id
-      first_name
-      last_name
-      email
+      name
+      post {
+        items {
+          id
+          title
+          content
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      comment {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -22,9 +42,13 @@ export const listUsers = /* GraphQL */ `
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        first_name
-        last_name
-        email
+        name
+        post {
+          nextToken
+        }
+        comment {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -32,20 +56,151 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
-export const getEvent = /* GraphQL */ `
-  query GetEvent($id: ID!) {
-    getEvent(id: $id) {
+export const getPost = /* GraphQL */ `
+  query GetPost($id: ID!) {
+    getPost(id: $id) {
       id
       title
-      description
-      image
-      gifts {
+      content
+      tags {
         items {
           id
+          postId
+          tagId
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
+        }
+        nextToken
+      }
+      user {
+        id
+        name
+        post {
+          nextToken
+        }
+        comment {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      userPostId
+    }
+  }
+`;
+export const listPosts = /* GraphQL */ `
+  query ListPosts(
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      nextToken
+    }
+  }
+`;
+export const getComment = /* GraphQL */ `
+  query GetComment($id: ID!) {
+    getComment(id: $id) {
+      id
+      content
+      post {
+        id
+        title
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      createdAt
+      updatedAt
+      userCommentId
+      postCommentsId
+    }
+  }
+`;
+export const listComments = /* GraphQL */ `
+  query ListComments(
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        content
+        post {
+          id
           title
-          description
-          image
-          event_id
+          content
+          createdAt
+          updatedAt
+          userPostId
+        }
+        createdAt
+        updatedAt
+        userCommentId
+        postCommentsId
+      }
+      nextToken
+    }
+  }
+`;
+export const getTag = /* GraphQL */ `
+  query GetTag($id: ID!) {
+    getTag(id: $id) {
+      id
+      label
+      posts {
+        items {
+          id
+          postId
+          tagId
           createdAt
           updatedAt
         }
@@ -56,19 +211,17 @@ export const getEvent = /* GraphQL */ `
     }
   }
 `;
-export const listEvents = /* GraphQL */ `
-  query ListEvents(
-    $filter: ModelEventFilterInput
+export const listTags = /* GraphQL */ `
+  query ListTags(
+    $filter: ModelTagFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
-        description
-        image
-        gifts {
+        label
+        posts {
           nextToken
         }
         createdAt
@@ -78,20 +231,36 @@ export const listEvents = /* GraphQL */ `
     }
   }
 `;
-export const getGift = /* GraphQL */ `
-  query GetGift($id: ID!) {
-    getGift(id: $id) {
+export const getPostTags = /* GraphQL */ `
+  query GetPostTags($id: ID!) {
+    getPostTags(id: $id) {
       id
-      title
-      description
-      image
-      event_id
-      event {
+      postId
+      tagId
+      post {
         id
         title
-        description
-        image
-        gifts {
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      tag {
+        id
+        label
+        posts {
           nextToken
         }
         createdAt
@@ -102,24 +271,28 @@ export const getGift = /* GraphQL */ `
     }
   }
 `;
-export const listGifts = /* GraphQL */ `
-  query ListGifts(
-    $filter: ModelGiftFilterInput
+export const listPostTags = /* GraphQL */ `
+  query ListPostTags(
+    $filter: ModelPostTagsFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listGifts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPostTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
-        description
-        image
-        event_id
-        event {
+        postId
+        tagId
+        post {
           id
           title
-          description
-          image
+          content
+          createdAt
+          updatedAt
+          userPostId
+        }
+        tag {
+          id
+          label
           createdAt
           updatedAt
         }
@@ -130,16 +303,16 @@ export const listGifts = /* GraphQL */ `
     }
   }
 `;
-export const giftsByEvent_id = /* GraphQL */ `
-  query GiftsByEvent_id(
-    $event_id: ID!
+export const postTagsByPostId = /* GraphQL */ `
+  query PostTagsByPostId(
+    $postId: ID!
     $sortDirection: ModelSortDirection
-    $filter: ModelGiftFilterInput
+    $filter: ModelPostTagsFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    giftsByEvent_id(
-      event_id: $event_id
+    postTagsByPostId(
+      postId: $postId
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -147,15 +320,59 @@ export const giftsByEvent_id = /* GraphQL */ `
     ) {
       items {
         id
-        title
-        description
-        image
-        event_id
-        event {
+        postId
+        tagId
+        post {
           id
           title
-          description
-          image
+          content
+          createdAt
+          updatedAt
+          userPostId
+        }
+        tag {
+          id
+          label
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const postTagsByTagId = /* GraphQL */ `
+  query PostTagsByTagId(
+    $tagId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostTagsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    postTagsByTagId(
+      tagId: $tagId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        postId
+        tagId
+        post {
+          id
+          title
+          content
+          createdAt
+          updatedAt
+          userPostId
+        }
+        tag {
+          id
+          label
           createdAt
           updatedAt
         }

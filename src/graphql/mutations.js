@@ -8,9 +8,29 @@ export const createUser = /* GraphQL */ `
   ) {
     createUser(input: $input, condition: $condition) {
       id
-      first_name
-      last_name
-      email
+      name
+      post {
+        items {
+          id
+          title
+          content
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      comment {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -23,9 +43,29 @@ export const updateUser = /* GraphQL */ `
   ) {
     updateUser(input: $input, condition: $condition) {
       id
-      first_name
-      last_name
-      email
+      name
+      post {
+        items {
+          id
+          title
+          content
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      comment {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -38,33 +78,26 @@ export const deleteUser = /* GraphQL */ `
   ) {
     deleteUser(input: $input, condition: $condition) {
       id
-      first_name
-      last_name
-      email
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createEvent = /* GraphQL */ `
-  mutation CreateEvent(
-    $input: CreateEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    createEvent(input: $input, condition: $condition) {
-      id
-      title
-      description
-      image
-      gifts {
+      name
+      post {
         items {
           id
           title
-          description
-          image
-          event_id
+          content
           createdAt
           updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      comment {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
         }
         nextToken
       }
@@ -73,77 +106,357 @@ export const createEvent = /* GraphQL */ `
     }
   }
 `;
-export const updateEvent = /* GraphQL */ `
-  mutation UpdateEvent(
-    $input: UpdateEventInput!
-    $condition: ModelEventConditionInput
+export const createPost = /* GraphQL */ `
+  mutation CreatePost(
+    $input: CreatePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    updateEvent(input: $input, condition: $condition) {
+    createPost(input: $input, condition: $condition) {
       id
       title
-      description
-      image
-      gifts {
+      content
+      tags {
         items {
           id
-          title
-          description
-          image
-          event_id
+          postId
+          tagId
           createdAt
           updatedAt
         }
         nextToken
       }
+      comments {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
+        }
+        nextToken
+      }
+      user {
+        id
+        name
+        post {
+          nextToken
+        }
+        comment {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
+      userPostId
     }
   }
 `;
-export const deleteEvent = /* GraphQL */ `
-  mutation DeleteEvent(
-    $input: DeleteEventInput!
-    $condition: ModelEventConditionInput
+export const updatePost = /* GraphQL */ `
+  mutation UpdatePost(
+    $input: UpdatePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    deleteEvent(input: $input, condition: $condition) {
+    updatePost(input: $input, condition: $condition) {
       id
       title
-      description
-      image
-      gifts {
+      content
+      tags {
         items {
           id
-          title
-          description
-          image
-          event_id
+          postId
+          tagId
           createdAt
           updatedAt
         }
         nextToken
       }
+      comments {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
+        }
+        nextToken
+      }
+      user {
+        id
+        name
+        post {
+          nextToken
+        }
+        comment {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
+      userPostId
     }
   }
 `;
-export const createGift = /* GraphQL */ `
-  mutation CreateGift(
-    $input: CreateGiftInput!
-    $condition: ModelGiftConditionInput
+export const deletePost = /* GraphQL */ `
+  mutation DeletePost(
+    $input: DeletePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    createGift(input: $input, condition: $condition) {
+    deletePost(input: $input, condition: $condition) {
       id
       title
-      description
-      image
-      event_id
-      event {
+      content
+      tags {
+        items {
+          id
+          postId
+          tagId
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          content
+          createdAt
+          updatedAt
+          userCommentId
+          postCommentsId
+        }
+        nextToken
+      }
+      user {
+        id
+        name
+        post {
+          nextToken
+        }
+        comment {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      userPostId
+    }
+  }
+`;
+export const createComment = /* GraphQL */ `
+  mutation CreateComment(
+    $input: CreateCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    createComment(input: $input, condition: $condition) {
+      id
+      content
+      post {
         id
         title
-        description
-        image
-        gifts {
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      createdAt
+      updatedAt
+      userCommentId
+      postCommentsId
+    }
+  }
+`;
+export const updateComment = /* GraphQL */ `
+  mutation UpdateComment(
+    $input: UpdateCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    updateComment(input: $input, condition: $condition) {
+      id
+      content
+      post {
+        id
+        title
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      createdAt
+      updatedAt
+      userCommentId
+      postCommentsId
+    }
+  }
+`;
+export const deleteComment = /* GraphQL */ `
+  mutation DeleteComment(
+    $input: DeleteCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    deleteComment(input: $input, condition: $condition) {
+      id
+      content
+      post {
+        id
+        title
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      createdAt
+      updatedAt
+      userCommentId
+      postCommentsId
+    }
+  }
+`;
+export const createTag = /* GraphQL */ `
+  mutation CreateTag(
+    $input: CreateTagInput!
+    $condition: ModelTagConditionInput
+  ) {
+    createTag(input: $input, condition: $condition) {
+      id
+      label
+      posts {
+        items {
+          id
+          postId
+          tagId
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTag = /* GraphQL */ `
+  mutation UpdateTag(
+    $input: UpdateTagInput!
+    $condition: ModelTagConditionInput
+  ) {
+    updateTag(input: $input, condition: $condition) {
+      id
+      label
+      posts {
+        items {
+          id
+          postId
+          tagId
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTag = /* GraphQL */ `
+  mutation DeleteTag(
+    $input: DeleteTagInput!
+    $condition: ModelTagConditionInput
+  ) {
+    deleteTag(input: $input, condition: $condition) {
+      id
+      label
+      posts {
+        items {
+          id
+          postId
+          tagId
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createPostTags = /* GraphQL */ `
+  mutation CreatePostTags(
+    $input: CreatePostTagsInput!
+    $condition: ModelPostTagsConditionInput
+  ) {
+    createPostTags(input: $input, condition: $condition) {
+      id
+      postId
+      tagId
+      post {
+        id
+        title
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      tag {
+        id
+        label
+        posts {
           nextToken
         }
         createdAt
@@ -154,23 +467,39 @@ export const createGift = /* GraphQL */ `
     }
   }
 `;
-export const updateGift = /* GraphQL */ `
-  mutation UpdateGift(
-    $input: UpdateGiftInput!
-    $condition: ModelGiftConditionInput
+export const updatePostTags = /* GraphQL */ `
+  mutation UpdatePostTags(
+    $input: UpdatePostTagsInput!
+    $condition: ModelPostTagsConditionInput
   ) {
-    updateGift(input: $input, condition: $condition) {
+    updatePostTags(input: $input, condition: $condition) {
       id
-      title
-      description
-      image
-      event_id
-      event {
+      postId
+      tagId
+      post {
         id
         title
-        description
-        image
-        gifts {
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      tag {
+        id
+        label
+        posts {
           nextToken
         }
         createdAt
@@ -181,23 +510,39 @@ export const updateGift = /* GraphQL */ `
     }
   }
 `;
-export const deleteGift = /* GraphQL */ `
-  mutation DeleteGift(
-    $input: DeleteGiftInput!
-    $condition: ModelGiftConditionInput
+export const deletePostTags = /* GraphQL */ `
+  mutation DeletePostTags(
+    $input: DeletePostTagsInput!
+    $condition: ModelPostTagsConditionInput
   ) {
-    deleteGift(input: $input, condition: $condition) {
+    deletePostTags(input: $input, condition: $condition) {
       id
-      title
-      description
-      image
-      event_id
-      event {
+      postId
+      tagId
+      post {
         id
         title
-        description
-        image
-        gifts {
+        content
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        userPostId
+      }
+      tag {
+        id
+        label
+        posts {
           nextToken
         }
         createdAt
